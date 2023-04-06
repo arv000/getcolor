@@ -1,0 +1,19 @@
+[Desktop Entry]
+Categories=Qt;
+Comment=取色器
+Exec=/usr/bin/getcolor %F
+GenericName=取色器
+Icon=/usr/share/icons/hicolor/scalable/apps/getcolor.png
+Keywords=svg;
+Name=取色器
+StartupNotify=true
+Terminal=false
+TryExec=/usr/bin/getcolor
+Type=Application
+X-Deepin-Vendor=getcolor
+
+# Translations:
+# Do not manually modify!
+Comment[zh_CN]=取色器
+Name[zh_CN]=取色器
+
