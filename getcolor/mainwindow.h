@@ -44,21 +44,25 @@ class MainWindow : public QMainWindow {
     int m_iRed;
     int m_iGreen;
     int m_iBulle;
-
+    QRect m_currentPoint;
     QPushButton *m_ptrBtnPickColor;
     QPushButton *m_ptrBtnCopy;
     QLineEdit *m_ptrLineColor;
-    QPickWidget *m_ptrWdgPick;
-    enum ColorType{
-           Red,
-            Green,
-            Blue
+    QVector<QPickWidget *> m_listPtrWdgPick;
+    //    QPickWidget *m_ptrWdgPick;
+    //    QPickWidget *m_ptrWdgPick2;
+    enum ColorType {
+        Red,
+        Green,
+        Blue
 
     };
+
    private:
     void initUI();
+    void initData();
     QLabel *updateShowLable(QLabel *label, Qt::GlobalColor color);
-    void updateLable( int value,ColorType type);
+    void updateLable(int value, ColorType type);
     QSlider *updateSlider(QSlider *slider);
     void initConnect();
     void updateShowColor();

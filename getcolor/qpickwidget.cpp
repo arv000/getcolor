@@ -27,7 +27,7 @@ void QPickWidget::setPickPicture(QPixmap pixmap)
 
 void QPickWidget::initConnect()
 {
-   // connect(this, SIGNAL(clicked()), this, SLOT(slotPickColor));
+    // connect(this, SIGNAL(clicked()), this, SLOT(slotPickColor));
 }
 
 void QPickWidget::slotPickColor() { this->close(); }
@@ -45,11 +45,12 @@ void QPickWidget::mouseMoveEvent(QMouseEvent *event)
 {
     int mouse_x = event->x();
     int mouse_y = event->y();
+
+    qInfo() << mouse_x << " " << mouse_y << " " << QCursor::pos();
     m_ptrLabMouse->move(mouse_x - m_ptrLabMouse->width() / 2,
                         mouse_y - m_ptrLabMouse->height() / 2);
-    // QRect rect(mouse_x - 3.5, mouse_y, 7, 7);
-    QPixmap cropped =
-        m_pixmapPickPicture.copy(mouse_x -4, mouse_y -4, 9, 9);
+
+    QPixmap cropped = m_pixmapPickPicture.copy(mouse_x - 4, mouse_y - 4, 9, 9);
     QPixmap cropped1 = cropped.scaled(100, 100, Qt::KeepAspectRatio);
 
     QPalette p;

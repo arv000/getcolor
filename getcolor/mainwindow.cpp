@@ -33,7 +33,6 @@ MainWindow::MainWindow(QWidget *parent)
     , m_ptrBtnPickColor(new QPushButton("选择", m_ptrWdgMain))
     , m_ptrBtnCopy(new QPushButton("复制", m_ptrWdgMain))
     , m_ptrLineColor(new QLineEdit(m_ptrWdgMain))
-    , m_ptrWdgPick(new QPickWidget(this))
 {
     initUI();
     initConnect();
@@ -137,10 +136,10 @@ void MainWindow::initConnect()
             SLOT(slotBlueValue(int)));
     connect(m_ptrBtnPickColor, SIGNAL(clicked()), this, SLOT(slotPickColor()));
     connect(m_ptrBtnCopy, SIGNAL(clicked()), this, SLOT(slotCopyColorValue()));
-    connect(m_ptrWdgPick, SIGNAL(finished(int)), this,
-            SLOT(slotClosePickWidget(int)));
-    connect(m_ptrWdgPick, &QPickWidget::sigColor, this,
-            &MainWindow::slotGetColor);
+    //    connect(m_ptrWdgPick, SIGNAL(finished(int)), this,
+    //            SLOT(slotClosePickWidget(int)));
+    //    connect(m_ptrWdgPick, &QPickWidget::sigColor, this,
+    //            &MainWindow::slotGetColor);
     connect(m_ptrLineRed, SIGNAL(textChanged(QString)), this,
             SLOT(slotRedValueChange(QString)));
     connect(m_ptrLineGreen, SIGNAL(textChanged(QString)), this,
@@ -199,15 +198,32 @@ void MainWindow::slotBlueValue(int value)
 
 void MainWindow::slotPickColor()
 {
+    m_currentPoint = this->geometry();
     this->hide();
+
     QTimer::singleShot(200, this, &MainWindow::slotShowPick);
 }
 
 void MainWindow::slotShowPick()
 {
     QScreen *screen = QGuiApplication::primaryScreen();
-    m_ptrWdgPick->setPickPicture(screen->grabWindow(0));
-    m_ptrWdgPick->showFullScreen();
+    QList<QScreen *> list = QGuiApplication::screens();
+    for (auto item : m_listPtrWdgPick) {
+        delete item;
+        item = nullptr;
+    }
+    m_listPtrWdgPick.clear();
+    for (auto item : list) {
+        auto temp = new QPickWidget();
+        temp->setPickPicture(item->grabWindow(0));
+        temp->move(item->geometry().x(), item->geometry().y());
+        temp->show();
+        connect(temp, SIGNAL(finished(int)), this,
+                SLOT(slotClosePickWidget(int)));
+        connect(temp, &QPickWidget::sigColor, this, &MainWindow::slotGetColor);
+        temp->showFullScreen();
+        m_listPtrWdgPick.push_back(temp);
+    }
 }
 
 void MainWindow::slotCopyColorValue()
@@ -218,7 +234,13 @@ void MainWindow::slotCopyColorValue()
 
 void MainWindow::slotClosePickWidget(int)
 {
-    this->showNormal();
+    for (auto item : m_listPtrWdgPick) {
+        item->close();
+    }
+
+    this->show();
+    this->setGeometry(m_currentPoint);
+    this->move(m_currentPoint.x(), m_currentPoint.y());
     qInfo() << "slotClosePickWidget";
 }
 

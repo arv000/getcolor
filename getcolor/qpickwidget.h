@@ -10,6 +10,7 @@ class QPickWidget : public QDialog {
     explicit QPickWidget(QWidget *parent = nullptr);
     void setPickPicture(QPixmap pixmap);
     QPixmap m_pixmapPickPicture;
+    // 放大镜效果控件
     QLabel *m_ptrLabMouse;
     void initConnect();
    signals:
