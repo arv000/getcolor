@@ -26,6 +26,9 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         build_type: [Release]
         c_compiler: [gcc, clang, cl]
+        qt_ver: [5.12.6]
+        qt_target: [desktop]
+        qt_arch: [win64_msvc2017_64, win32_msvc2017]
         include:
           - os: windows-latest
             c_compiler: cl
@@ -46,7 +49,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2.0.0
+      with:
+       version: ${{ matrix.qt_ver }}
+       target: ${{ matrix.qt_target }}
+       arch: ${{ matrix.qt_arch }}
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
       id: strings
